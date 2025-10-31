@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:demotalkasecond/views/Auth/views/login_screen.dart';
 import 'package:demotalkasecond/common/colors.dart';
+import 'package:demotalkasecond/views/language_screen.dart';
+import 'package:demotalkasecond/views/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () {
       // keep splash 2 seconds (change as you like)
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => LoginScreen()),
+        MaterialPageRoute(builder: (_) => WelcomeScreen()),
       );
     });
   }

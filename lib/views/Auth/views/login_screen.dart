@@ -1,6 +1,7 @@
+import 'package:demotalkasecond/views/language_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:demotalkasecond/views/Auth/views/otp_screens.dart';
 import 'package:demotalkasecond/common/colors.dart';
-import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,9 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Example list for nationality dropdown
   final List<Map<String, String>> _nationalities = [
-    {'label': 'United States', 'code': '+1', 'currency': 'USD'},
-    {'label': 'India', 'code': '+91', 'currency': 'INR'},
-    {'label': 'United Kingdom', 'code': '+44', 'currency': 'GBP'},
+    {'label': 'United States',   'code': '+1',  'currency': 'USD'},
+    {'label': 'India',           'code': '+91', 'currency': 'INR'},
+    {'label': 'United Kingdom',  'code': '+44', 'currency': 'GBP'},
     // add more as needed
   ];
 
@@ -54,14 +55,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
+                // Full Name field
                 TextFormField(
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.myDarkColor.withOpacity(0.1),
                     labelText: 'Full Name',
                     labelStyle: TextStyle(color: AppColors.colorwhite),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
                       borderSide: BorderSide(color: AppColors.colorwhite),
                     ),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
                       borderSide: BorderSide(color: AppColors.accentColor),
                     ),
                   ),
@@ -75,12 +81,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   onSaved: (value) => _fullName = value,
                 ),
                 const SizedBox(height: 16),
+                // Nationality dropdown
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.myDarkColor.withOpacity(0.1),
                     labelText: 'Nationality',
                     labelStyle: TextStyle(color: AppColors.colorwhite),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
                       borderSide: BorderSide(color: AppColors.colorwhite),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: AppColors.accentColor),
                     ),
                   ),
                   dropdownColor: AppColors.backgroundColor,
@@ -109,23 +123,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                // Mobile number with country code
                 Row(
                   children: [
                     Container(
                       width: 100,
                       child: Row(
                         children: [
-                          // Placeholder for flag icon
-                          // You’d ideally use a package like country_code_picker
                           Text(
                             _countryCode,
                             style: TextStyle(color: AppColors.colorwhite),
                           ),
                           const SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: AppColors.colorwhite,
-                          ),
+                          Icon(Icons.arrow_drop_down,
+                               color: AppColors.colorwhite),
                         ],
                       ),
                     ),
@@ -133,15 +144,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     Expanded(
                       child: TextFormField(
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.myDarkColor.withOpacity(0.1),
                           labelText: 'Mobile Number',
-                          labelStyle: TextStyle(color: AppColors.colorwhite),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorwhite),
+                          labelStyle:
+                             TextStyle(color: AppColors.colorwhite),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide:
+                              BorderSide(color: AppColors.colorwhite),
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.accentColor,
-                            ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide:
+                              BorderSide(color: AppColors.accentColor),
                           ),
                         ),
                         style: TextStyle(color: AppColors.colorwhite),
@@ -150,7 +166,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (value == null || value.trim().isEmpty) {
                             return 'Mobile number is required';
                           }
-                          // You can add more validation rules for phone format
                           return null;
                         },
                         onChanged: (value) {
@@ -163,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
+                // Disclaimer
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
@@ -192,6 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   activeColor: AppColors.accentColor,
                 ),
                 const SizedBox(height: 24),
+                // Agree & Continue button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled
@@ -203,12 +220,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? () {
                           if (_formKey.currentState?.validate() ?? false) {
                             _formKey.currentState?.save();
-                            // Navigate to OTP or next screen
+                            // Navigate to OTP screen
                             Navigator.push(
                               context,
                               MaterialPageRoute<void>(
                                 builder: (context) =>
-                                    OtpScreen(mobileNumber: ''),
+                                OtpScreen(mobileNumber: _mobileNumber),
+                                 
                               ),
                             );
                           }

@@ -35,6 +35,7 @@ class _OtpScreenState extends State<OtpScreen> {
   void _startTimer() {
     _remainingSeconds = 30;
     _isResendEnabled = false;
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       if (_remainingSeconds == 0) {
         setState(() {
@@ -70,8 +71,7 @@ class _OtpScreenState extends State<OtpScreen> {
   void _onVerify() {
     // TODO: Trigger verify OTP logic
     final otp = _otpController.text.trim();
-    if (otp != '1234') {
-      // placeholder check
+    if (otp != '1234') { // placeholder check
       setState(() {
         _errorMessage = 'Invalid OTP. Try again.';
       });
@@ -86,13 +86,16 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
-        title: Text(
-          'Verify Mobile',
-          style: TextStyle(color: AppColors.colorwhite),
+        title: Center(
+          child: Text(
+            'Verify Mobile',
+            style: TextStyle(color: AppColors.colorwhite),
+          ),
         ),
-        iconTheme: IconThemeData(color: AppColors.colorwhite),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -105,41 +108,46 @@ class _OtpScreenState extends State<OtpScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            TextField(
+            TextFormField(
               controller: _otpController,
               keyboardType: TextInputType.number,
               style: TextStyle(color: AppColors.colorwhite, fontSize: 24),
+              maxLength: 6,
               decoration: InputDecoration(
+                filled: true,
+                fillColor: AppColors.myDarkColor.withOpacity(0.1),
                 hintText: '••••',
                 hintStyle: TextStyle(color: AppColors.midGray),
-                enabledBorder: UnderlineInputBorder(
+                labelText: 'OTP',
+                labelStyle: TextStyle(color: AppColors.colorwhite),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: AppColors.colorwhite),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: AppColors.accentColor),
                 ),
               ),
-              maxLength: 6,
             ),
             if (_errorMessage != null) ...[
               const SizedBox(height: 8),
-              Text(_errorMessage!, style: TextStyle(color: Colors.redAccent)),
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.redAccent),
+              ),
             ],
             const SizedBox(height: 24),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isButtonEnabled
-                    ? AppColors.accentColor
-                    : AppColors.midGray,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 48,
-                ),
+                backgroundColor:
+                    _isButtonEnabled ? AppColors.accentColor : AppColors.midGray,
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
               ),
               onPressed: _isButtonEnabled ? _onVerify : null,
-              child: Text(
+              child: const Text(
                 'Verify',
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
             const Spacer(),
@@ -148,9 +156,7 @@ class _OtpScreenState extends State<OtpScreen> {
               child: Text(
                 _timerText,
                 style: TextStyle(
-                  color: _isResendEnabled
-                      ? AppColors.accentColor
-                      : AppColors.midGray,
+                  color: _isResendEnabled ? AppColors.accentColor : AppColors.midGray,
                 ),
               ),
             ),
