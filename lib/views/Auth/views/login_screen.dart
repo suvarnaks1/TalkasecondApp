@@ -1,4 +1,4 @@
-import 'package:demotalkasecond/Auth/views/otp_screens.dart';
+import 'package:demotalkasecond/views/Auth/views/otp_screens.dart';
 import 'package:demotalkasecond/common/colors.dart';
 import 'package:flutter/material.dart';
 

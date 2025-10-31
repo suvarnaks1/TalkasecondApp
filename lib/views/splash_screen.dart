@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:demotalkasecond/Auth/views/login_screen.dart';
+import 'package:demotalkasecond/views/Auth/views/login_screen.dart';
 import 'package:demotalkasecond/common/colors.dart';
 import 'package:flutter/material.dart';
 
