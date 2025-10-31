@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1762801457",
+    "project_id": "demotalkasecond",
+    "storage_bucket": "demotalkasecond.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1762801457:android:a5f41d86024015f62c2210",
+        "android_client_info": {
+          "package_name": "com.example.demotalkasecond"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMHNgj96Ry8C-X4axj7RQ8JF1rWHGtpBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
