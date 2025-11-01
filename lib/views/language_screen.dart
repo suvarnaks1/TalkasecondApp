@@ -1,4 +1,5 @@
-import 'package:demotalkasecond/common/colors.dart';
+
+import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {

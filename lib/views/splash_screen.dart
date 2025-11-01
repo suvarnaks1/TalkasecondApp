@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/Auth/views/login_screen.dart';
-import 'package:demotalkasecond/common/colors.dart';
+
+import 'package:demotalkasecond/views/category_screen.dart';
+import 'package:demotalkasecond/views/client_app/home_screen.dart';
 import 'package:demotalkasecond/views/language_screen.dart';
 import 'package:demotalkasecond/views/welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () {
       // keep splash 2 seconds (change as you like)
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => WelcomeScreen()),
+        MaterialPageRoute(builder: (_) => ClientHomeScreen()),
       );
     });
   }

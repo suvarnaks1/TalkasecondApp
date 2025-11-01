@@ -1,6 +1,7 @@
+import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/about_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:demotalkasecond/common/colors.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

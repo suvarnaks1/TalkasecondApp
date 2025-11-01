@@ -1,7 +1,8 @@
-import 'package:demotalkasecond/views/language_screen.dart';
+import 'package:demotalkasecond/core/firebase/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/views/Auth/views/otp_screens.dart';
-import 'package:demotalkasecond/common/colors.dart';
+import '../../../core/utils/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,23 +15,104 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _fullName;
   String? _selectedNationality;
-  String _countryCode = '+1'; // default
+  String _countryCode = '+1';
   String _mobileNumber = '';
   bool _agreed = false;
+  bool _isLoading = false;
 
-  // Example list for nationality dropdown
   final List<Map<String, String>> _nationalities = [
-    {'label': 'United States',   'code': '+1',  'currency': 'USD'},
-    {'label': 'India',           'code': '+91', 'currency': 'INR'},
-    {'label': 'United Kingdom',  'code': '+44', 'currency': 'GBP'},
-    // add more as needed
+    {'label': 'United States', 'code': '+1', 'currency': 'USD'},
+    {'label': 'India', 'code': '+91', 'currency': 'INR'},
+    {'label': 'United Kingdom', 'code': '+44', 'currency': 'GBP'},
   ];
 
   bool get _isButtonEnabled {
     return _agreed &&
         (_formKey.currentState?.validate() ?? false) &&
         _selectedNationality != null &&
-        _mobileNumber.trim().isNotEmpty;
+        _mobileNumber.trim().isNotEmpty &&
+        !_isLoading;
+  }
+
+  Future<void> _verifyPhoneNumber() async {
+    if (!_isButtonEnabled) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final String completePhoneNumber = '$_countryCode$_mobileNumber';
+      print('Attempting to verify: $completePhoneNumber'); // Debug
+
+      await FirebaseAuthService.verifyPhoneNumber(
+        phoneNumber: completePhoneNumber,
+        onCodeSent: (String verificationId, int? forceResendingToken) {
+          setState(() {
+            _isLoading = false;
+          });
+          print('Code sent successfully. Verification ID: $verificationId'); // Debug
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpScreen(
+                mobileNumber: completePhoneNumber,
+                verificationId: verificationId,
+                fullName: _fullName ?? '',
+                nationality: _selectedNationality ?? '',
+              ),
+            ),
+          );
+        },
+        onVerificationFailed: (FirebaseAuthException error) {
+          setState(() {
+            _isLoading = false;
+          });
+          print('Verification failed: ${error.code} - ${error.message}'); // Debug
+          _showErrorDialog('Verification Failed', 'Error: ${error.code}\n${error.message}');
+        },
+        onVerificationCompleted: (PhoneAuthCredential credential) async {
+          print('Auto verification completed'); // Debug
+          try {
+            await FirebaseAuthService.signInWithVerificationCode(
+              verificationId: credential.verificationId ?? '',
+              smsCode: credential.smsCode ?? '',
+            );
+          } catch (e) {
+            print('Auto verification error: $e'); // Debug
+          }
+        },
+        onCodeAutoRetrievalTimeout: (String verificationId) {
+          setState(() {
+            _isLoading = false;
+          });
+          print('Code auto retrieval timed out'); // Debug
+        },
+      );
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('General error: $e'); // Debug
+      _showErrorDialog('Error', e.toString());
+    }
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -55,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                // Full Name field
+                
                 TextFormField(
                   decoration: InputDecoration(
                     filled: true,
@@ -81,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onSaved: (value) => _fullName = value,
                 ),
                 const SizedBox(height: 16),
-                // Nationality dropdown
+
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     filled: true,
@@ -111,6 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _selectedNationality = value;
                       final selected = _nationalities.firstWhere(
                         (item) => item['label'] == value,
+                        orElse: () => _nationalities.first,
                       );
                       _countryCode = selected['code'] ?? _countryCode;
                     });
@@ -123,11 +206,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                // Mobile number with country code
+
                 Row(
                   children: [
                     Container(
                       width: 100,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.myDarkColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: AppColors.colorwhite),
+                      ),
                       child: Row(
                         children: [
                           Text(
@@ -135,8 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(color: AppColors.colorwhite),
                           ),
                           const SizedBox(width: 8),
-                          Icon(Icons.arrow_drop_down,
-                               color: AppColors.colorwhite),
+                          Icon(Icons.arrow_drop_down, color: AppColors.colorwhite),
                         ],
                       ),
                     ),
@@ -147,17 +235,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           filled: true,
                           fillColor: AppColors.myDarkColor.withOpacity(0.1),
                           labelText: 'Mobile Number',
-                          labelStyle:
-                             TextStyle(color: AppColors.colorwhite),
+                          labelStyle: TextStyle(color: AppColors.colorwhite),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide:
-                              BorderSide(color: AppColors.colorwhite),
+                            borderSide: BorderSide(color: AppColors.colorwhite),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide:
-                              BorderSide(color: AppColors.accentColor),
+                            borderSide: BorderSide(color: AppColors.accentColor),
                           ),
                         ),
                         style: TextStyle(color: AppColors.colorwhite),
@@ -165,6 +250,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Mobile number is required';
+                          }
+                          if (value.length < 8) {
+                            return 'Please enter valid mobile number';
                           }
                           return null;
                         },
@@ -178,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Disclaimer
+
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
@@ -188,11 +276,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(12),
                   child: SingleChildScrollView(
                     child: Text(
-                      'Disclaimer: Please read and agree to the terms and conditions before proceeding. By clicking Agree & Continue you accept that your currency will be set based on your selected nationality. Changing nationality later will show “Currency will change for new bookings only.”',
+                      'Disclaimer: Please read and agree to the terms and conditions before proceeding. By clicking Agree & Continue you accept that your currency will be set based on your selected nationality. Changing nationality later will show "Currency will change for new bookings only."',
                       style: TextStyle(color: AppColors.midGray),
                     ),
                   ),
                 ),
+
                 CheckboxListTile(
                   value: _agreed,
                   onChanged: (val) {
@@ -208,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   activeColor: AppColors.accentColor,
                 ),
                 const SizedBox(height: 24),
-                // Agree & Continue button
+
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled
@@ -216,26 +305,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         : AppColors.midGray,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  onPressed: _isButtonEnabled
-                      ? () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            _formKey.currentState?.save();
-                            // Navigate to OTP screen
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (context) =>
-                                OtpScreen(mobileNumber: _mobileNumber),
-                                 
-                              ),
-                            );
-                          }
-                        }
-                      : null,
-                  child: const Text(
-                    'Agree & Continue',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                  onPressed: _isButtonEnabled ? _verifyPhoneNumber : null,
+                  child: _isLoading
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.colorwhite),
+                          ),
+                        )
+                      : const Text(
+                          'Agree & Continue',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
                 ),
                 const SizedBox(height: 24),
               ],

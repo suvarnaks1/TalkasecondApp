@@ -1,10 +1,22 @@
 import 'dart:async';
-import 'package:demotalkasecond/common/colors.dart';
+import 'package:demotalkasecond/core/utils/app_colors.dart';
+import 'package:demotalkasecond/core/firebase/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
-  const OtpScreen({Key? key, required this.mobileNumber}) : super(key: key);
+  final String verificationId;
+  final String fullName;
+  final String nationality;
+  
+  const OtpScreen({
+    Key? key, 
+    required this.mobileNumber,
+    required this.fullName,
+    required this.nationality,
+    required this.verificationId, int? forceResendingToken,
+  }) : super(key: key);
 
   static const String routeName = '/otp';
 
@@ -16,6 +28,7 @@ class _OtpScreenState extends State<OtpScreen> {
   final _otpController = TextEditingController();
   bool _isButtonEnabled = false;
   bool _isResendEnabled = false;
+  bool _isLoading = false;
   String _timerText = 'Resend in 30 sec';
   Timer? _timer;
   int _remainingSeconds = 30;
@@ -27,7 +40,7 @@ class _OtpScreenState extends State<OtpScreen> {
     _startTimer();
     _otpController.addListener(() {
       setState(() {
-        _isButtonEnabled = _otpController.text.trim().length >= 4;
+        _isButtonEnabled = _otpController.text.trim().length >= 6; // Changed to 6 for typical OTP length
       });
     });
   }
@@ -61,24 +74,129 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _onResendOtp() {
     if (!_isResendEnabled) return;
-    // TODO: Trigger resend OTP logic
-    _startTimer();
+    
     setState(() {
+      _isLoading = true;
       _errorMessage = null;
     });
+
+    // Trigger resend OTP logic
+    _resendVerificationCode();
   }
 
-  void _onVerify() {
-    // TODO: Trigger verify OTP logic
-    final otp = _otpController.text.trim();
-    if (otp != '1234') { // placeholder check
+  Future<void> _resendVerificationCode() async {
+    try {
+      await FirebaseAuthService.verifyPhoneNumber(
+        phoneNumber: widget.mobileNumber,
+        onCodeSent: (String verificationId, int? forceResendingToken) {
+          setState(() {
+            _isLoading = false;
+          });
+          _startTimer();
+          // You can show a success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('OTP resent successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        },
+        onVerificationFailed: (FirebaseAuthException error) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'Failed to resend OTP: ${error.message}';
+          });
+        },
+        onVerificationCompleted: (PhoneAuthCredential credential) async {
+          // Auto verification if SMS is automatically retrieved
+          try {
+            await FirebaseAuthService.signInWithVerificationCode(
+              verificationId: credential.verificationId ?? '',
+              smsCode: credential.smsCode ?? '',
+            );
+            _navigateToNextScreen();
+          } catch (e) {
+            setState(() {
+              _isLoading = false;
+              _errorMessage = 'Auto-verification failed';
+            });
+          }
+        },
+        onCodeAutoRetrievalTimeout: (String verificationId) {
+          setState(() {
+            _isLoading = false;
+          });
+        },
+      );
+    } catch (e) {
       setState(() {
-        _errorMessage = 'Invalid OTP. Try again.';
+        _isLoading = false;
+        _errorMessage = 'Failed to resend OTP';
       });
-      return;
     }
-    // on success → navigate to language selection
+  }
+
+  Future<void> _onVerify() async {
+    if (!_isButtonEnabled || _isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final otp = _otpController.text.trim();
+      
+      // Verify OTP with Firebase
+      await FirebaseAuthService.signInWithVerificationCode(
+        verificationId: widget.verificationId,
+        smsCode: otp,
+      );
+
+      // Success - Navigate to next screen
+      _navigateToNextScreen();
+      
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = _getErrorMessage(e.code);
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Verification failed. Please try again.';
+      });
+    }
+  }
+
+  String _getErrorMessage(String errorCode) {
+    switch (errorCode) {
+      case 'invalid-verification-code':
+        return 'Invalid OTP. Please check and try again.';
+      case 'session-expired':
+        return 'OTP session expired. Please request a new OTP.';
+      case 'quota-exceeded':
+        return 'Too many attempts. Please try again later.';
+      default:
+        return 'Verification failed. Please try again.';
+    }
+  }
+
+  void _navigateToNextScreen() {
+    // Navigate to language selection or home screen
     Navigator.of(context).pushReplacementNamed('/languageSelection');
+    
+    // If you want to pass user data to next screen, you can use:
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => LanguageSelectionScreen(
+    //       fullName: widget.fullName,
+    //       nationality: widget.nationality,
+    //       phoneNumber: widget.mobileNumber,
+    //     ),
+    //   ),
+    // );
   }
 
   @override
@@ -95,7 +213,6 @@ class _OtpScreenState extends State<OtpScreen> {
             style: TextStyle(color: AppColors.colorwhite),
           ),
         ),
-        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -108,6 +225,8 @@ class _OtpScreenState extends State<OtpScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
+            
+            // OTP Input Field
             TextFormField(
               controller: _otpController,
               keyboardType: TextInputType.number,
@@ -116,7 +235,7 @@ class _OtpScreenState extends State<OtpScreen> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.myDarkColor.withOpacity(0.1),
-                hintText: '••••',
+                hintText: 'Enter 6-digit OTP',
                 hintStyle: TextStyle(color: AppColors.midGray),
                 labelText: 'OTP',
                 labelStyle: TextStyle(color: AppColors.colorwhite),
@@ -128,37 +247,71 @@ class _OtpScreenState extends State<OtpScreen> {
                   borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(color: AppColors.accentColor),
                 ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
               ),
             ),
+            
             if (_errorMessage != null) ...[
               const SizedBox(height: 8),
               Text(
                 _errorMessage!,
                 style: TextStyle(color: Colors.redAccent),
+                textAlign: TextAlign.center,
               ),
             ],
             const SizedBox(height: 24),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    _isButtonEnabled ? AppColors.accentColor : AppColors.midGray,
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
-              ),
-              onPressed: _isButtonEnabled ? _onVerify : null,
-              child: const Text(
-                'Verify',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+            
+            // Verify Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _isButtonEnabled && !_isLoading
+                      ? AppColors.accentColor
+                      : AppColors.midGray,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: _isButtonEnabled && !_isLoading ? _onVerify : null,
+                child: _isLoading
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.colorwhite),
+                        ),
+                      )
+                    : Text(
+                        'Verify',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
               ),
             ),
             const Spacer(),
+            
+            // Resend OTP Button
             TextButton(
-              onPressed: _isResendEnabled ? _onResendOtp : null,
-              child: Text(
-                _timerText,
-                style: TextStyle(
-                  color: _isResendEnabled ? AppColors.accentColor : AppColors.midGray,
-                ),
-              ),
+              onPressed: _isResendEnabled && !_isLoading ? _onResendOtp : null,
+              child: _isLoading && _isResendEnabled
+                  ? SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.accentColor),
+                      ),
+                    )
+                  : Text(
+                      _timerText,
+                      style: TextStyle(
+                        color: _isResendEnabled
+                            ? AppColors.accentColor
+                            : AppColors.midGray,
+                      ),
+                    ),
             ),
             const SizedBox(height: 16),
             Text(
