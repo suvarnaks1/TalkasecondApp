@@ -1,16 +1,15 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-
-class UploadMedicalReportPage extends StatefulWidget {
-  const UploadMedicalReportPage({super.key});
+class UploadMedicalReportScreen extends StatefulWidget {
+  const UploadMedicalReportScreen({super.key});
 
   @override
-  State<UploadMedicalReportPage> createState() =>
+  State<UploadMedicalReportScreen> createState() =>
       _UploadMedicalReportPageState();
 }
 
-class _UploadMedicalReportPageState extends State<UploadMedicalReportPage> {
+class _UploadMedicalReportPageState extends State<UploadMedicalReportScreen> {
   String? uploadedFileName;
   final TextEditingController remarksController = TextEditingController();
 
@@ -31,26 +30,35 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBlueBackground,
+
+      // ✅ Added AppBar
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 4,
+        centerTitle: true,
+        title: const Text(
+            "Upload Medical Report",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+       
+      ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-              Text(
-                "Upload Medical Report",
-                style: TextStyle(
-                  color: AppColors.myDarkColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            
               const SizedBox(height: 30),
 
               // Upload button
               InkWell(
-                //onTap: _pickFile,
+                // onTap: _pickFile,
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   width: double.infinity,
@@ -139,8 +147,7 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // After submit, move to psychologist-like flow
-                    // Navigate to Choose Dietician screen (similar flow)
+                    // Navigate to Dietician selection screen
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.backgroundColor,

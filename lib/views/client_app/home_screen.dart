@@ -69,7 +69,7 @@ class ClientHomeScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => PurposeSelectionPage(),
+                          builder: (_) => PurposeSelectionScreen(),
                         ),
                       );
                     },

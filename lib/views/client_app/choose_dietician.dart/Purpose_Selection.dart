@@ -2,40 +2,48 @@ import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/choose_dietician.dart/SelectDiseaseTypePage.dart';
 import 'package:flutter/material.dart';
 
-
-class PurposeSelectionPage extends StatelessWidget {
-  const PurposeSelectionPage({super.key});
+class PurposeSelectionScreen extends StatelessWidget {
+  const PurposeSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBlueBackground,
+
+      // ✅ AppBar Added
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 4,
+        centerTitle: true,
+        title: const Text(
+        "Select Your Purpose",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+       
+      ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 60),
-              Text(
-                "Select Your Purpose",
-                style: TextStyle(
-                  color: AppColors.myDarkColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+             
+            
               const SizedBox(height: 40),
-              
+
               // Option 1
               _PurposeOptionCard(
                 title: "Lifestyle Disease Management",
                 icon: Icons.favorite,
                 onTap: () {
-                  // Navigate to next page or perform action
-                          Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => SelectDiseaseTypePage()),
-      );
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => SelectDiseaseTypeScreen()),
+                  );
                 },
               ),
 
@@ -46,10 +54,9 @@ class PurposeSelectionPage extends StatelessWidget {
                 title: "Weight Management",
                 icon: Icons.fitness_center,
                 onTap: () {
-                  // Navigate to next page or perform action
-                                   Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => SelectDiseaseTypePage()),
-      );
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => SelectDiseaseTypeScreen()),
+                  );
                 },
               ),
             ],

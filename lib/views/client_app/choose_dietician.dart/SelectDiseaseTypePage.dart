@@ -2,15 +2,14 @@ import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/choose_dietician.dart/UploadMedicalReportPage.dart';
 import 'package:flutter/material.dart';
 
-
-class SelectDiseaseTypePage extends StatefulWidget {
-  const SelectDiseaseTypePage({super.key});
+class SelectDiseaseTypeScreen extends StatefulWidget {
+  const SelectDiseaseTypeScreen({super.key});
 
   @override
-  State<SelectDiseaseTypePage> createState() => _SelectDiseaseTypePageState();
+  State<SelectDiseaseTypeScreen> createState() => _SelectDiseaseTypePageState();
 }
 
-class _SelectDiseaseTypePageState extends State<SelectDiseaseTypePage> {
+class _SelectDiseaseTypePageState extends State<SelectDiseaseTypeScreen> {
   String? selectedDisease;
 
   final List<String> diseaseList = [
@@ -25,21 +24,30 @@ class _SelectDiseaseTypePageState extends State<SelectDiseaseTypePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBlueBackground,
+
+      // ✅ AppBar added here
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 4,
+        centerTitle: true,
+        title: const Text(
+                "Select Disease Type",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+       
+      ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-              Text(
-                "Select Disease Type",
-                style: TextStyle(
-                  color: AppColors.myDarkColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+             
               const SizedBox(height: 30),
 
               // Disease options
@@ -105,7 +113,8 @@ class _SelectDiseaseTypePageState extends State<SelectDiseaseTypePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => UploadMedicalReportPage()),
+                              builder: (_) => UploadMedicalReportScreen(),
+                            ),
                           );
                         }
                       : null,
