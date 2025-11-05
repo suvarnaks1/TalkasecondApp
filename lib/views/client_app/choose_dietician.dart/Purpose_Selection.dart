@@ -1,4 +1,5 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
+import 'package:demotalkasecond/views/client_app/choose_dietician.dart/SelectDiseaseTypePage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -32,6 +33,9 @@ class PurposeSelectionPage extends StatelessWidget {
                 icon: Icons.favorite,
                 onTap: () {
                   // Navigate to next page or perform action
+                          Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => SelectDiseaseTypePage()),
+      );
                 },
               ),
 
@@ -43,6 +47,9 @@ class PurposeSelectionPage extends StatelessWidget {
                 icon: Icons.fitness_center,
                 onTap: () {
                   // Navigate to next page or perform action
+                                   Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => SelectDiseaseTypePage()),
+      );
                 },
               ),
             ],

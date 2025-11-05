@@ -1,10 +1,11 @@
+import 'package:demotalkasecond/views/client_app/choose_consultant/booking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 
-class BookingScreen extends StatelessWidget {
+class View_phychologist_Screen extends StatelessWidget {
   final Map<String, dynamic> doctorData;
 
-  const BookingScreen({super.key, required this.doctorData});
+  const View_phychologist_Screen({super.key, required this.doctorData});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,16 @@ class BookingScreen extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
                 ),
-                onPressed: () {},
+                onPressed: () {
+
+                   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                           BookingScreen(doctorData: doctorData)
+                                      ),
+                                    );
+                },
                 child: const Text("Book Appointment", style: TextStyle(color: Colors.white)),
               ),
             ],

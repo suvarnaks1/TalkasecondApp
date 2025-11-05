@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
-import 'boking_screen.dart';
+import 'View_phychologist_Screen.dart';
 
 class PsychologistListScreen extends StatelessWidget {
   final String gender;
@@ -42,7 +42,10 @@ class PsychologistListScreen extends StatelessWidget {
       backgroundColor: AppColors.lightBlueBackground,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
-        title: const Text("Available Psychologists", style: TextStyle(color: Colors.white)),
+        title: const Text(
+          "Available Psychologists",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -62,8 +65,8 @@ class PsychologistListScreen extends StatelessWidget {
                   int crossAxisCount = constraints.maxWidth >= 900
                       ? 4
                       : constraints.maxWidth >= 600
-                          ? 3
-                          : 2;
+                      ? 3
+                      : 2;
 
                   return GridView.builder(
                     itemCount: psychologists.length,
@@ -71,12 +74,12 @@ class PsychologistListScreen extends StatelessWidget {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 0.68,
                     ),
                     itemBuilder: (context, index) {
                       final doc = psychologists[index];
                       return Card(
-                        color: AppColors.colorwhite,
+                        color: AppColors.backgroundColor,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -93,22 +96,34 @@ class PsychologistListScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              Text(doc["name"],
-                                  style: TextStyle(
-                                    color: AppColors.myDarkColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                              Text(
+                                doc["name"],
+                                style: TextStyle(
+                                  color: AppColors.myDarkColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               const SizedBox(height: 4),
-                              Text(doc["speciality"],
-                                  style: TextStyle(color: AppColors.midGray)),
+                              Text(
+                                doc["speciality"],
+                                style: TextStyle(color: AppColors.lightBlueBackground),
+                              ),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  const Icon(Icons.star, color: Colors.amber, size: 18),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 18,
+                                  ),
                                   const SizedBox(width: 4),
-                                  Text("${doc["rating"]} • ${doc["experience"]}",
-                                      style: TextStyle(color: AppColors.midGray)),
+                                  Text(
+                                    "${doc["rating"]} • ${doc["experience"]}",
+                                    style: TextStyle(
+                                      color: AppColors.lightBlueBackground,
+                                    ),
+                                  ),
                                 ],
                               ),
                               const Spacer(),
@@ -119,12 +134,16 @@ class PsychologistListScreen extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => BookingScreen(doctorData: doc),
+                                        builder: (_) =>
+                                            View_phychologist_Screen(doctorData: doc),
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.arrow_forward_ios,
-                                      color: AppColors.backgroundColor, size: 20),
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: AppColors.colorwhite,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
                             ],
