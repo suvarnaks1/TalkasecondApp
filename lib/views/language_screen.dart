@@ -1,5 +1,6 @@
 
 import 'package:demotalkasecond/core/utils/app_colors.dart';
+import 'package:demotalkasecond/views/client_app/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
@@ -105,8 +106,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 ),
                 onPressed: _selectedLanguage != null
                     ? () {
-                        // TODO: Save selected language in preferences
-                        // and navigate to next screen
+                              Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => ClientHomeScreen()),
+      );
                       }
                     : null,
                 child: const Text(

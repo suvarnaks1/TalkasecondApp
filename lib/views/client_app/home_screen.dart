@@ -1,5 +1,6 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/choose_consultant/gender_selection_screen.dart';
+import 'package:demotalkasecond/views/client_app/choose_dietician.dart/Purpose_Selection.dart';
 import 'package:flutter/material.dart';
 
 class ClientHomeScreen extends StatelessWidget {
@@ -65,12 +66,12 @@ class ClientHomeScreen extends StatelessWidget {
                     title: "Dietician & Fitness",
                     color: AppColors.accentColor,
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (_) => const DieticianScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PurposeSelectionPage(),
+                        ),
+                      );
                     },
                   ),
                   _buildServiceCard(

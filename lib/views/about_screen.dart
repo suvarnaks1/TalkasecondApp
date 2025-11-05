@@ -1,5 +1,7 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/Auth/views/login_screen.dart';
+import 'package:demotalkasecond/views/client_app/home_screen.dart' show ClientHomeScreen;
+import 'package:demotalkasecond/views/language_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -68,7 +70,7 @@ class AboutScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                  Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => LoginScreen()),
+        MaterialPageRoute(builder: (_) => LanguageSelectionScreen()),
       );
                 },
                 child: Container(
