@@ -48,20 +48,22 @@ class PsychologistDashboard extends StatelessWidget {
 class _SummaryCardsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _SummaryCard(title: 'Upcoming', value: '4'),
-        const SizedBox(width: 12),
-        _SummaryCard(title: 'Completed', value: '20'),
-        const SizedBox(width: 12),
-        _SummaryCard(title: 'Earnings', value: '₹12 000'),
-      
-       
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _SummaryCard(title: 'Upcoming', value: '4'),
+          const SizedBox(width: 12),
+          _SummaryCard(title: 'Completed', value: '20'),
+          const SizedBox(width: 12),
+          _SummaryCard(title: 'Earnings', value: '₹12000000'),
+        
+         
+        ],
+      ),
     );
   }
 }
-
 class _SummaryCard extends StatelessWidget {
   final String title;
   final String value;
@@ -69,14 +71,13 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return GestureDetector(
+      onTap: (){},
       child: Container(
+        width: 120, // fixed width
         decoration: BoxDecoration(
-          color: const Color(0xFFE8F8F0), // light green background, adjust as needed
-          border: Border.all(
-            color: const Color(0xFF2ECC71), // green border color
-            width: 1.0,                       // thin line
-          ),
+          color: const Color(0xFFE8F8F0),
+          border: Border.all(color: const Color(0xFF2ECC71), width: 1.0),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.all(16),
@@ -86,19 +87,18 @@ class _SummaryCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: AppColors.midGray,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: AppColors.midGray, fontSize: 14),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
-                color: AppColors.myDarkColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: AppColors.myDarkColor, fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
