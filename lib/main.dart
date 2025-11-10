@@ -1,4 +1,5 @@
 import 'package:demotalkasecond/views/Auth/views/login_screen.dart';
+import 'package:demotalkasecond/views/demo/demo_login.dart';
 import 'package:demotalkasecond/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
-        child: LoginScreen(),
+        child: DemoLogin(),
       ),
     );
   }
