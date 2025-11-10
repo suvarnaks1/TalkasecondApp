@@ -44,7 +44,6 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-       
       ),
 
       body: SafeArea(
@@ -53,9 +52,7 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            
               const SizedBox(height: 30),
-
               // Upload button
               InkWell(
                 // onTap: _pickFile,

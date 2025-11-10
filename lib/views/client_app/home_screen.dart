@@ -1,6 +1,7 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/choose_consultant/gender_selection_screen.dart';
 import 'package:demotalkasecond/views/client_app/choose_dietician.dart/Purpose_Selection.dart';
+
 import 'package:flutter/material.dart';
 
 class ClientHomeScreen extends StatelessWidget {
@@ -83,10 +84,10 @@ class ClientHomeScreen extends StatelessWidget {
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
-                      //     builder: (_) => const PhysicianScreen(),
+                      //     builder: (_) =>  QuestionnaireScreen(),
                       //   ),
                       // );
-                    },
+                    }, 
                   ),
                 ],
               ),
@@ -137,5 +138,15 @@ class ClientHomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+class PhysicianScreen extends StatelessWidget {
+  const PhysicianScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: Text('PhysicianScreen'),),);
   }
 }

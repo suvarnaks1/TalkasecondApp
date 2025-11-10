@@ -15,7 +15,7 @@ class OtpScreen extends StatefulWidget {
     required this.mobileNumber,
     required this.fullName,
     required this.nationality,
-    required this.verificationId, int? forceResendingToken,
+    required this.verificationId, int? forceResendingToken, required String role,
   }) : super(key: key);
 
   static const String routeName = '/otp';

@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _fullName;
   String? _selectedNationality;
+  String? _selectedRole;
   String _countryCode = '+1';
   String _mobileNumber = '';
   bool _agreed = false;
@@ -22,20 +23,35 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final List<Map<String, String>> _nationalities = [
     {'label': 'United States', 'code': '+1', 'currency': 'USD'},
-    {'label': 'India', 'code': '+91', 'currency': 'INR'},
-    {'label': 'United Kingdom', 'code': '+44', 'currency': 'GBP'},
+    {'label': 'India',       'code': '+91', 'currency': 'INR'},
+    {'label': 'United Kingdom','code': '+44','currency': 'GBP'},
+  ];
+
+  final List<String> _roles = [
+    'Patients',
+    'Psychologists',
+    'Psychiatrists',
+    'Dieticians',
+    'Physicians',
+    'Trainers',
+    'Department Heads',
+    'Technical / Support Team',
+    'Director',
   ];
 
   bool get _isButtonEnabled {
-    return _agreed &&
-        (_formKey.currentState?.validate() ?? false) &&
-        _selectedNationality != null &&
-        _mobileNumber.trim().isNotEmpty &&
-        !_isLoading;
+    return _agreed
+        && (_formKey.currentState?.validate() ?? false)
+        && _selectedNationality != null
+        && _mobileNumber.trim().isNotEmpty
+        && _selectedRole != null
+        && !_isLoading;
   }
 
   Future<void> _verifyPhoneNumber() async {
     if (!_isButtonEnabled) return;
+
+    _formKey.currentState!.save();
 
     setState(() {
       _isLoading = true;
@@ -43,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final String completePhoneNumber = '$_countryCode$_mobileNumber';
-      print('Attempting to verify: $completePhoneNumber'); // Debug
+      print('Attempting to verify: $completePhoneNumber');
 
       await FirebaseAuthService.verifyPhoneNumber(
         phoneNumber: completePhoneNumber,
@@ -51,8 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             _isLoading = false;
           });
-          print('Code sent successfully. Verification ID: $verificationId'); // Debug
-          
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -61,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 verificationId: verificationId,
                 fullName: _fullName ?? '',
                 nationality: _selectedNationality ?? '',
+                role: _selectedRole ?? '',
               ),
             ),
           );
@@ -69,32 +84,30 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             _isLoading = false;
           });
-          print('Verification failed: ${error.code} - ${error.message}'); // Debug
           _showErrorDialog('Verification Failed', 'Error: ${error.code}\n${error.message}');
         },
         onVerificationCompleted: (PhoneAuthCredential credential) async {
-          print('Auto verification completed'); // Debug
+          print('Auto verification completed');
           try {
             await FirebaseAuthService.signInWithVerificationCode(
               verificationId: credential.verificationId ?? '',
               smsCode: credential.smsCode ?? '',
             );
           } catch (e) {
-            print('Auto verification error: $e'); // Debug
+            print('Auto verification error: $e');
           }
         },
         onCodeAutoRetrievalTimeout: (String verificationId) {
           setState(() {
             _isLoading = false;
           });
-          print('Code auto retrieval timed out'); // Debug
+          print('Code auto retrieval timed out');
         },
       );
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      print('General error: $e'); // Debug
       _showErrorDialog('Error', e.toString());
     }
   }
@@ -137,7 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                
                 TextFormField(
                   decoration: InputDecoration(
                     filled: true,
@@ -163,7 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   onSaved: (value) => _fullName = value,
                 ),
                 const SizedBox(height: 16),
-
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     filled: true,
@@ -181,6 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   dropdownColor: AppColors.backgroundColor,
                   style: TextStyle(color: AppColors.colorwhite),
+                  isExpanded: true,
                   value: _selectedNationality,
                   items: _nationalities.map((item) {
                     return DropdownMenuItem<String>(
@@ -206,7 +218,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-
                 Row(
                   children: [
                     Container(
@@ -224,7 +235,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(color: AppColors.colorwhite),
                           ),
                           const SizedBox(width: 8),
-                          Icon(Icons.arrow_drop_down, color: AppColors.colorwhite),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColors.colorwhite,
+                          ),
                         ],
                       ),
                     ),
@@ -242,7 +256,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.accentColor),
+                            borderSide: BorderSide(
+                              color: AppColors.accentColor,
+                            ),
                           ),
                         ),
                         style: TextStyle(color: AppColors.colorwhite),
@@ -251,22 +267,57 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (value == null || value.trim().isEmpty) {
                             return 'Mobile number is required';
                           }
-                          if (value.length < 8) {
+                          if (value.trim().length < 8) {
                             return 'Please enter valid mobile number';
                           }
                           return null;
                         },
                         onChanged: (value) {
-                          setState(() {
-                            _mobileNumber = value;
-                          });
+                          _mobileNumber = value.trim();
                         },
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 24),
-
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.myDarkColor.withOpacity(0.1),
+                    labelText: 'Role',
+                    labelStyle: TextStyle(color: AppColors.colorwhite),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: AppColors.colorwhite),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: AppColors.accentColor),
+                    ),
+                  ),
+                  dropdownColor: AppColors.backgroundColor,
+                  style: TextStyle(color: AppColors.colorwhite),
+                  isExpanded: true,
+                  value: _selectedRole,
+                  items: _roles.map((role) {
+                    return DropdownMenuItem<String>(
+                      value: role,
+                      child: Text(role),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedRole = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select role';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
@@ -281,7 +332,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
                 CheckboxListTile(
                   value: _agreed,
                   onChanged: (val) {
@@ -297,7 +347,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   activeColor: AppColors.accentColor,
                 ),
                 const SizedBox(height: 24),
-
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled
@@ -312,7 +361,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.colorwhite),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.colorwhite,
+                            ),
                           ),
                         )
                       : const Text(
