@@ -1,7 +1,7 @@
-
+import 'package:demotalkasecond/views/demo/demo_login.dart';
+import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/home_screen.dart';
-import 'package:flutter/material.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
@@ -12,111 +12,121 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
-  String? _selectedLanguage;
+  String? _selectedLanguageCode;
 
   final List<Map<String, String>> _languages = [
-    {'label': 'English', 'code': 'en'},
-    {'label': 'Malayalam', 'code': 'ma'},
-    {'label': 'हिन्दी', 'code': 'hi'},
-    {'label': 'Español', 'code': 'es'},
-    {'label': 'Français', 'code': 'fr'},
-    {'label': 'Deutsch', 'code': 'de'},
-    {'label': 'Português', 'code': 'pt'},
-    {'label': '中文 (简体)', 'code': 'zh'},
-    {'label': 'اردو', 'code': 'ur'},
-    {'label': 'বাংলা', 'code': 'bn'},
+    {'label': 'English', 'code': 'en', 'flag': '🇺🇸'},
+    {'label': 'Malayalam', 'code': 'ml', 'flag': '🇮🇳'},
+    {'label': 'हिन्दी', 'code': 'hi', 'flag': '🇮🇳'},
+    {'label': 'Español', 'code': 'es', 'flag': '🇪🇸'},
+    {'label': 'Français', 'code': 'fr', 'flag': '🇫🇷'},
+    {'label': 'Deutsch', 'code': 'de', 'flag': '🇩🇪'},
+    {'label': 'Português', 'code': 'pt', 'flag': '🇵🇹'},
+    {'label': '中文 (简体)', 'code': 'zh', 'flag': '🇨🇳'},
+    {'label': 'اردو', 'code': 'ur', 'flag': '🇵🇰'},
+    {'label': 'বাংলা', 'code': 'bn', 'flag': '🇧🇩'},
   ];
+
+  void _onLanguageTap(String code) {
+    setState(() {
+      _selectedLanguageCode = code;
+    });
+  }
+
+  void _onContinue() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => DemoLogin()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-    
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 0,
+        title: const Text(
+          "Select Language",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Column(
             children: [
-              const SizedBox(height: 16),
-              Text(
-                'Select Your Language',
-                style: TextStyle(
-                  color: AppColors.colorwhite,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               Expanded(
                 child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.9,
                   children: _languages.map((lang) {
-                    final isSelected = _selectedLanguage == lang['code'];
+                    final bool isSelected = _selectedLanguageCode == lang['code'];
                     return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedLanguage = lang['code'];
-                        });
-                      },
+                      onTap: () => _onLanguageTap(lang['code']!),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.accentColor
-                              : AppColors.colorwhite,
+                          color: isSelected ? AppColors.accentColor : Colors.white,
+                          borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: isSelected
-                                ? AppColors.accentColor
-                                : AppColors.midGray,
-                            width: 2,
+                            color: isSelected ? AppColors.colorwhite : AppColors.midGray,
+                            width: isSelected ? 2 : 1,
                           ),
-                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Center(
-                          child: Text(
-                            lang['label'] ?? '',
-                            style: TextStyle(
-                              color: isSelected
-                                  ? AppColors.colorwhite
-                                  : AppColors.myDarkColor,
-                              fontSize: 18,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              lang['flag']!,
+                              style: const TextStyle(fontSize: 28),
                             ),
-                          ),
+                            const SizedBox(height: 8),
+                            Text(
+                              lang['label']!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: isSelected ? Colors.white : AppColors.myDarkColor,
+                                fontSize: 14,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedLanguage != null
+                  backgroundColor: _selectedLanguageCode != null
                       ? AppColors.accentColor
                       : AppColors.midGray,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 48,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: _selectedLanguage != null
-                    ? () {
-                              Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => ClientHomeScreen()),
-      );
-                      }
-                    : null,
+                onPressed: _selectedLanguageCode != null ? _onContinue : null,
                 child: const Text(
                   'Continue',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
             ],
           ),
         ),

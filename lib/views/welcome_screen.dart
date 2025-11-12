@@ -1,116 +1,194 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/about_screen.dart';
+import 'package:demotalkasecond/views/demo/demo_about.dart';
 import 'package:flutter/material.dart';
 
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fadeController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _fadeAnimation =
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut);
+
+    _fadeController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.colorwhite,
-      body: Column(
-        children: [
-          // Wavy top half
-          Expanded(
-            flex: 3,
-            child: ClipPath(
-              clipper: _WaveClipper(),              // custom clipper for wave shape
-              child: Container(
-                width: double.infinity,
-                color: AppColors.backgroundColor,   // your green color
-                child: Column(
-                  
-                  children: [
-                    SizedBox(height: 150,),
-                    Image.asset(
-                      "assets/meee.png",             // replace with your logo asset
-                      height: 120,
-                    ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      "Welcome to Talk A Second",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "your trusted platform for professional online counselling, Dietician services, and fitness training.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.backgroundColor,
+              AppColors.backgroundColor,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          // Bottom area with green background and Skip button
-          Expanded(
-            flex: 1,
-            child: Container(
-              width: double.infinity,
-              color: AppColors.colorwhite,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => AboutScreen()),
-      );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Text(
-                      "Skip →",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+// Hero Image with Cloud Background
+Stack(
+  alignment: Alignment.center,
+  children: [
+    // Cloud-like background container
+    Container(
+      width: 260,
+      height: 160,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(80),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white.withOpacity(0.1),
+            blurRadius: 30,
+            spreadRadius: 10,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
+    ),
+
+    // Hero Image Animation
+    TweenAnimationBuilder(
+      tween:
+          Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero),
+      duration: const Duration(milliseconds: 900),
+      curve: Curves.easeOutBack,
+      builder: (context, Offset offset, child) {
+        return Transform.translate(
+          offset: offset * 100,
+          child: child,
+        );
+      },
+      child: Hero(
+        tag: "logo",
+        child: Image.asset('assets/meee-removebg-preview.png')
+      ),
+    ),
+  ],
+),
+
+
+                  const SizedBox(height: 40),
+
+                  // Title Text Animation
+                  TweenAnimationBuilder(
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeIn,
+                    builder: (context, value, child) {
+                      return Opacity(opacity: value, child: child);
+                    },
+                    child: Text(
+                      "Welcome to Talk A Second",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.colorwhite,
+                        letterSpacing: 0.6,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  // Subtitle Text Animation
+                  TweenAnimationBuilder(
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: const Duration(seconds: 2),
+                    curve: Curves.easeInOut,
+                    builder: (context, value, child) {
+                      return Opacity(opacity: value, child: child);
+                    },
+                    child: Text(
+                      "Your trusted platform for online counselling, diet, and fitness support — all in one place.",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  // Button Slide-in Animation
+                  TweenAnimationBuilder(
+                    tween: Tween<Offset>(
+                        begin: const Offset(0, 1), end: Offset.zero),
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, Offset offset, child) {
+                      return Transform.translate(
+                        offset: offset * 60,
+                        child: child,
+                      );
+                    },
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.colorwhite,
+                        foregroundColor: AppColors.backgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 90, vertical: 16),
+                        elevation: 8,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => DemoAbout()),
+                        );
+                      },
+                      child: const Text(
+                        "Get Started →",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 80),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
-}
-
-// Custom clipper for wave shape
-class _WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, size.height * 0.75);
-    var firstControlPoint = Offset(size.width / 4, size.height);
-    var firstEndPoint = Offset(size.width / 2, size.height * 0.75);
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-        firstEndPoint.dx, firstEndPoint.dy);
-
-    var secondControlPoint = Offset(size.width * 3 / 4, size.height * 0.5);
-    var secondEndPoint = Offset(size.width, size.height * 0.75);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-        secondEndPoint.dx, secondEndPoint.dy);
-
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
