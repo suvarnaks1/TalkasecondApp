@@ -11,7 +11,9 @@ class PurposeSelectionScreen extends StatelessWidget {
       backgroundColor: AppColors.colorwhite,
 
       // ✅ AppBar Added
-      appBar: AppBar(
+      appBar: AppBar(  iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         backgroundColor: AppColors.backgroundColor,
         elevation: 4,
         centerTitle: true,
@@ -85,7 +87,7 @@ class _PurposeOptionCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.lightPeach,
+          color: AppColors.colorwhite,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

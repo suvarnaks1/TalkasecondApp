@@ -54,7 +54,7 @@ class _DemoLoginState extends State<DemoLogin> {
         case 'Dieticians':
         case 'Physicians':
         case 'Trainers':
-          nextScreen = const PsychologistDashboard();
+          nextScreen = PsychologistDashboard();
           break;
         case 'Department Heads':
         case 'Technical / Support Team':
@@ -320,10 +320,3 @@ class AdminDashboard extends StatelessWidget {
   }
 }
 
-class PsychologistDashboard extends StatelessWidget {
-  const PsychologistDashboard({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Psychologist Dashboard')));
-  }
-}

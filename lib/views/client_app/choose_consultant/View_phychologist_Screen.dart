@@ -11,7 +11,9 @@ class View_phychologist_Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.colorwhite,
-      appBar: AppBar(
+      appBar: AppBar(  iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         backgroundColor: AppColors.backgroundColor,
         title: Text(doctorData["name"], style: const TextStyle(color: Colors.white)),
         centerTitle: true,

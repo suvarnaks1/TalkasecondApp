@@ -1,3 +1,4 @@
+import 'package:demotalkasecond/views/demo/demo_gender.dart';
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/choose_consultant/gender_selection_screen.dart';
@@ -18,7 +19,7 @@ class ClientHomeScreen extends StatelessWidget {
         'onTap': () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const GenderSelectionScreen()),
+            MaterialPageRoute(builder: (_) => DemoGender()),
           );
         },
       },

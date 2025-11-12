@@ -29,6 +29,9 @@ class _SelectDiseaseTypePageState extends State<SelectDiseaseTypeScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         elevation: 4,
+         iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         centerTitle: true,
         title: const Text(
                 "Select Disease Type",
@@ -66,7 +69,7 @@ class _SelectDiseaseTypePageState extends State<SelectDiseaseTypeScreen> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.accentColor
-                            : AppColors.lightPeach,
+                            : AppColors.colorwhite,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(

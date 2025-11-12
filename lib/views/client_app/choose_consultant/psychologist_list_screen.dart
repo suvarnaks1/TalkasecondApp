@@ -40,7 +40,10 @@ class PsychologistListScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.colorwhite,
-      appBar: AppBar(
+      appBar: AppBar(elevation: 4,
+        iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         backgroundColor: AppColors.backgroundColor,
         title: const Text(
           "Available Psychologists",
@@ -127,25 +130,25 @@ class PsychologistListScreen extends StatelessWidget {
                                 ],
                               ),
                               const Spacer(),
+                              
                               Align(
                                 alignment: Alignment.bottomRight,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
+                                child: GestureDetector(
+                                  onTap: () {
+                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) =>
-                                            View_phychologist_Screen(doctorData: doc),
+                                        builder: (_) =>View_phychologist_Screen(doctorData: doc)
+                                           
                                       ),
                                     );
                                   },
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: AppColors.colorwhite,
-                                    size: 20,
-                                  ),
+                                  child: Text(
+                                  
+                                    "Click",style: TextStyle(color: AppColors.colorwhite)),
                                 ),
-                              ),
+                                ),
+                              
                             ],
                           ),
                         ),

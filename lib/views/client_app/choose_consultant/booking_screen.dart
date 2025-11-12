@@ -40,7 +40,9 @@ class _BookingScreenState extends State<BookingScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.colorwhite,
-      appBar: AppBar(
+      appBar: AppBar(  iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         backgroundColor: AppColors.backgroundColor,
         title: const Text("Book Appointment", style: TextStyle(color: Colors.white)),
         centerTitle: true,

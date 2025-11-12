@@ -33,6 +33,9 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportScreen> {
 
       // ✅ Added AppBar
       appBar: AppBar(
+          iconTheme: const IconThemeData(
+    color: Colors.white,  // <-- back icon becomes white
+  ),
         backgroundColor: AppColors.backgroundColor,
         elevation: 4,
         centerTitle: true,

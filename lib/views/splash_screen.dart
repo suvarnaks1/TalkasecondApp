@@ -26,7 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: AppColors.backgroundColor,
       body: Center(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               "assets/logo-removebg-preview.png", // update with your image path
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 500,
               fit: BoxFit.contain,
             ),
-            
+
             Text(
               "Talk A Second", // your app name or text
               style: TextStyle(
