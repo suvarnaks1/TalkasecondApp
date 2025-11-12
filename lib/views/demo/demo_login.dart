@@ -27,12 +27,8 @@ class _DemoLoginState extends State<DemoLogin> {
   final List<String> _roles = [
     'Patients',
     'Psychologists',
-    'Psychiatrists',
     'Dieticians',
-    'Physicians',
-    'Trainers',
-    'Department Heads',
-    'Technical / Support Team',
+    'Webinar',
     'Director',
   ];
 

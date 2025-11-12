@@ -29,7 +29,7 @@ class _UploadMedicalReportPageState extends State<UploadMedicalReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
+      backgroundColor: AppColors.colorwhite,
 
       // ✅ Added AppBar
       appBar: AppBar(

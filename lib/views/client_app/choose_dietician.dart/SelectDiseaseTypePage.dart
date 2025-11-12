@@ -23,7 +23,7 @@ class _SelectDiseaseTypePageState extends State<SelectDiseaseTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
+      backgroundColor: AppColors.colorwhite,
 
       // ✅ AppBar added here
       appBar: AppBar(

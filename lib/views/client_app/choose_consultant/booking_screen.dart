@@ -39,7 +39,7 @@ class _BookingScreenState extends State<BookingScreen> {
     final double finalAmount = sessionPrice + (sessionPrice * taxRate);
 
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
+      backgroundColor: AppColors.colorwhite,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         title: const Text("Book Appointment", style: TextStyle(color: Colors.white)),

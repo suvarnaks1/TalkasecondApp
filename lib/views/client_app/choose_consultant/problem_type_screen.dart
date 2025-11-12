@@ -26,7 +26,7 @@ class _ProblemTypeScreenState extends State<ProblemTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
+      backgroundColor: AppColors.colorwhite,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         title: const Text("Select Problem Type", style: TextStyle(color: Colors.white)),

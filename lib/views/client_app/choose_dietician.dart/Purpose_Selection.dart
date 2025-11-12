@@ -8,7 +8,7 @@ class PurposeSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
+      backgroundColor: AppColors.colorwhite,
 
       // ✅ AppBar Added
       appBar: AppBar(
