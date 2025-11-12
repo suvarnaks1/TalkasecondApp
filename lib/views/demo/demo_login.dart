@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/client_app/home_screen.dart';
-import 'package:demotalkasecond/views/Psychologist/PsychologistHomeScreen.dart';
+import 'package:demotalkasecond/views/consultant/Dashboard.dart';
 
 class DemoLogin extends StatefulWidget {
   const DemoLogin({Key? key}) : super(key: key);
