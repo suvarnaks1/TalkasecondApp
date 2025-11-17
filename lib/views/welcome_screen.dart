@@ -92,7 +92,7 @@ Stack(
       },
       child: Hero(
         tag: "logo",
-        child: Image.asset('assets/meee-removebg-preview.png')
+        child: Image.asset('assets/pro.png')
       ),
     ),
   ],

@@ -8,4 +8,5 @@ class AppColors {
   static Color lightPeach = Color(0xFFFFF0BE);
   static Color myDarkColor = Color(0xFF01080A);
   static Color colorwhite = Color(0xFFF7F7F7);
+  static Color brandGreen = Color(0xFF4AAE7E);
 }

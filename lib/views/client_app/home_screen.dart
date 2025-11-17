@@ -13,7 +13,7 @@ class ClientHomeScreen extends StatelessWidget {
     final List<Map<String, dynamic>> services = [
       {
         'title': "Counselling session",
-        'image': "assets/Des-removebg-preview.png",
+        'image': "assets/counselling.png",
         'buttonText': "Book an Appointment",
         'color': const Color(0xFF2E7D5E),
         'onTap': () {
@@ -25,7 +25,7 @@ class ClientHomeScreen extends StatelessWidget {
       },
       {
         'title': "Dietitian / Fitness Trainer",
-        'image': "assets/DietPlan-removebg-preview.png",
+        'image': "assets/dietplan.png",
         'buttonText': "Book an Appointment",
         'color': const Color(0xFF197D83),
         'onTap': () {
@@ -37,7 +37,7 @@ class ClientHomeScreen extends StatelessWidget {
       },
       {
         'title': "Webinar Session",
-        'image': "assets/webniar-removebg-preview.png",
+        'image': "assets/webinar.png",
         'buttonText': "Book Your Seats",
         'color': const Color(0xFFB76E26),
         'onTap': () {

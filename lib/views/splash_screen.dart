@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/logo-removebg-preview.png", // update with your image path
+              "assets/logo.png", // update with your image path
               width: 500,
               height: 500,
               fit: BoxFit.contain,

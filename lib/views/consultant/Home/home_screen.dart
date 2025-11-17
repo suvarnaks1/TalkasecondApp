@@ -7,25 +7,30 @@ class ConsultantHomeTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // four tabs
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.backgroundColor,
           title: Row(
+           
             children: [
-              SizedBox(width: 80),
+              SizedBox(width: 80,),
               const Text('Dashboard', style: TextStyle(color: Colors.white)),
-              SizedBox(width: 80),
-              IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+             SizedBox(width: 86),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.notifications),
+              ),
             ],
           ),
           centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
+
         body: Column(
           children: [
             Container(
-              color: AppColors.lightBlueBackground,
+              color: AppColors.colorwhite,
               child: TabBar(
                 indicatorColor: AppColors.accentColor,
                 labelColor: AppColors.accentColor,
@@ -40,41 +45,139 @@ class ConsultantHomeTabs extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  // 1. Upcoming Appointments
-                  ListView.builder(
+                  // 1. Upcoming: Use GridView.builder
+                  GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: 5,
+                    itemCount: 6, // number of upcoming appointments
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 columns
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 3 / 4, // width : height ratio
+                    ),
                     itemBuilder: (ctx, idx) {
                       return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: const Icon(Icons.calendar_today),
-                          title: Text('Appointment #${idx + 1}'),
-                          subtitle: const Text('Date · Time'),
-                          trailing: const Icon(Icons.arrow_forward),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // handle tap
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Profile avatar
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: AssetImage('assets/meee-removebg-preview.png'),
+                                  backgroundColor: AppColors.lightBlueBackground,
+                                ),
+
+                                const SizedBox(height: 12),
+
+                                // Name / Title
+                                Text(
+                                  'Client Rahul ${idx + 1}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                // Date & Time
+                                Text(
+                                  '12 Nov, 3:00 PM',
+                                  style: TextStyle(color: AppColors.midGray),
+                                  textAlign: TextAlign.center,
+                                ),
+
+                                const Spacer(),
+
+                                // Action button or icon
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(Icons.arrow_forward_ios, color: AppColors.accentColor),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },
                   ),
 
-                  // 2. Completed Sessions
-                  ListView.builder(
+                  // 2. Completed Sessions: Also as GridView
+                  GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: 3,
+                    itemCount: 4, // number of completed sessions
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 3 / 4,
+                    ),
                     itemBuilder: (ctx, idx) {
                       return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: const Icon(Icons.check_circle_outline),
-                          title: Text('Session #${idx + 1}'),
-                          subtitle: const Text('Completed on Date'),
-                          trailing: const Icon(Icons.star),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // open session detail
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage: NetworkImage(
+                                    'https://example.com/avatar_completed_$idx.jpg',
+                                  ),
+                                  backgroundColor: AppColors.lightBlueBackground,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  'Session ${idx + 1}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Completed on 10 Nov',
+                                  style: TextStyle(color: AppColors.midGray),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const Spacer(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: const [
+                                    Icon(Icons.star, color: Colors.amber),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },
                   ),
 
-                  // 3. Wallet / Earnings summary
+                  // 3. Wallet / Earnings summary (same as before)
                   Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -103,6 +206,9 @@ class ConsultantHomeTabs extends StatelessWidget {
                               vertical: 12,
                               horizontal: 24,
                             ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           onPressed: () {
                             // View wallet details
@@ -114,37 +220,6 @@ class ConsultantHomeTabs extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-
-                  // 4. Notifications
-                  ListView(
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: const Icon(Icons.notifications),
-                          title: const Text('New booking received'),
-                          subtitle: const Text('Client XYZ · 10 mins ago'),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: const Icon(Icons.notifications_active),
-                          title: const Text('Reschedule request'),
-                          subtitle: const Text('Client ABC · 2 hrs ago'),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: const Icon(Icons.people),
-                          title: const Text('Referral alert'),
-                          subtitle: const Text('You got a new referral!'),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
