@@ -1,10 +1,9 @@
+import 'package:demotalkasecond/views/client_app/choose_consultant/problem_type_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
-import 'problem_type_screen.dart';
 
 class GenderSelectionScreen extends StatefulWidget {
   const GenderSelectionScreen({super.key});
-
   @override
   State<GenderSelectionScreen> createState() => _GenderSelectionScreenState();
 }
@@ -12,120 +11,144 @@ class GenderSelectionScreen extends StatefulWidget {
 class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
   String? selectedGender;
 
-  final genders = ["Male", "Female", "No preference"];
+  final List<String> genders = ["Male", "Female", "No preference"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBlueBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
-        centerTitle: true,
-        title: const Text(
-          "Choose Consultant",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Select your preferred consultant gender",
-              style: TextStyle(
-                color: AppColors.myDarkColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+      backgroundColor: AppColors.colorwhite,
+      // Use no AppBar to match full screen style in the image
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Placeholder for a square image/avatar at top
+              Center(
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundColor, // placeholder background
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(Icons.person, size: 60, color: Colors.white),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
+              Center(
+                child: Text(
+                  "Introduce Yourself",
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Fill out the rest of your details so people know a little more about you",
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
 
-            // Gender Cards
-            Expanded(
-              child: ListView.builder(
-                itemCount: genders.length,
-                itemBuilder: (context, index) {
-                  String gender = genders[index];
-                  bool isSelected = selectedGender == gender;
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() => selectedGender = gender);
-                    },
-                    child: Card(
-                      color: isSelected
-                          ? AppColors.accentColor.withOpacity(0.8)
-                          : AppColors.colorwhite,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                          color: isSelected
-                              ? AppColors.backgroundColor
-                              : Colors.transparent,
-                          width: 1.5,
-                        ),
+              // Gender selection cards
+              for (var gender in genders) ...[
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedGender = gender;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: selectedGender == gender
+                          ? AppColors.accentColor
+                          : AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: selectedGender == gender
+                            ? AppColors.accentColor
+                            : Colors.transparent,
+                        width: 2,
                       ),
-                      elevation: 5,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: ListTile(
-                        leading: Icon(
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
                           gender == "Male"
                               ? Icons.male
                               : gender == "Female"
-                                  ? Icons.female
-                                  : Icons.person_outline,
-                          color: AppColors.backgroundColor,
-                          size: 34,
+                              ? Icons.female
+                              : Icons.person_outline,
+                          size: 28,
+                          color: selectedGender == gender
+                              ? Colors.white
+                              : Colors.grey,
                         ),
-                        title: Text(
+                        const SizedBox(width: 16),
+                        Text(
                           gender,
                           style: TextStyle(
-                            color: AppColors.myDarkColor,
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
+                            color: selectedGender == gender
+                                ? Colors.white
+                                : Colors.black87,
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
-
-            // Continue Button
-            ElevatedButton(
-              onPressed: selectedGender == null
-                  ? null
-                  : () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProblemTypeScreen(
-                            selectedGender: selectedGender!,
-                          ),
-                        ),
-                      );
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.backgroundColor,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              child: const Center(
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              ],
+
+              const Spacer(),
+
+              // Continue Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: (selectedGender != null)
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProblemTypeScreen(
+                                selectedGender: selectedGender!,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.accentColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    "Next",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

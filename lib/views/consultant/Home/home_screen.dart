@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:demotalkasecond/core/utils/app_colors.dart';
+import 'package:flutter/material.dart';
 
 class ConsultantHomeTabs extends StatelessWidget {
   const ConsultantHomeTabs({Key? key}) : super(key: key);
@@ -7,45 +7,73 @@ class ConsultantHomeTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      // The length must match the number of tabs (3)
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundColor,
-          title: Row(
-           
+          
+          // 1. Add toolbarHeight to increase the main part of the AppBar
+          toolbarHeight: 100, // Increased from the default 56.0
+          title: Column(
             children: [
-              SizedBox(width: 80,),
-              const Text('Dashboard', style: TextStyle(color: Colors.white)),
-             SizedBox(width: 86),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30, // reduce radius to fit well in AppBar
+                    backgroundImage: AssetImage(
+                      'assets/pro.png',
+                    ), // use AssetImage
+                  ),
+                  const SizedBox(width: 8), // Add spacing
+                  const Text(
+                    "hi Dr Suvarna",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(), // Use Spacer to push the icon button to the right
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+                ],
               ),
             ],
           ),
           centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.white),
-        ),
-
-        body: Column(
-          children: [
-            Container(
-              color: AppColors.colorwhite,
+          backgroundColor: AppColors.colorwhite,
+          // 2. Adjust the PreferredSize in 'bottom' to increase the tab bar area height
+          bottom: PreferredSize(
+            // Increased the height to, say, 80 (was 60)
+            preferredSize: const Size.fromHeight(80),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.colorwhite,
+                borderRadius: BorderRadius.circular(40),
+              ),
               child: TabBar(
-                indicatorColor: AppColors.accentColor,
-                labelColor: AppColors.accentColor,
-                unselectedLabelColor: AppColors.midGray,
+                splashBorderRadius: BorderRadius.circular(40),
+                indicator: BoxDecoration(
+                  color: AppColors.backgroundColor,
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                labelColor: Colors.white,
+                unselectedLabelColor: AppColors.backgroundColor,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 24),
+                dividerColor: Colors.transparent,
                 tabs: const [
-                  Tab(text: 'Upcoming'),
-                  Tab(text: 'Completed'),
-                  Tab(text: 'Wallet'),
+                  Tab(text: '   Upcoming   '),
+                  Tab(text: '   Completed   '),
+                  Tab(text: '   Wallets   '),
                 ],
               ),
             ),
+          ),
+        ),
+
+        // --- START: Integration of the TabBarView Content ---
+        body: Column(
+          children: [
             Expanded(
               child: TabBarView(
                 children: [
-                  // 1. Upcoming: Use GridView.builder
+                  // 1. Upcoming: Use GridView.builder for Appointments
                   GridView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: 6, // number of upcoming appointments
@@ -73,7 +101,7 @@ class ConsultantHomeTabs extends StatelessWidget {
                                 // Profile avatar
                                 CircleAvatar(
                                   radius: 40,
-                                  backgroundImage: AssetImage('assets/meee-removebg-preview.png'),
+                                  backgroundImage: const AssetImage('assets/pro.png'),
                                   backgroundColor: AppColors.lightBlueBackground,
                                 ),
 
@@ -100,13 +128,8 @@ class ConsultantHomeTabs extends StatelessWidget {
 
                                 const Spacer(),
 
-                                // Action button or icon
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(Icons.arrow_forward_ios, color: AppColors.accentColor),
-                                  ],
-                                ),
+       
+                               
                               ],
                             ),
                           ),
@@ -142,8 +165,9 @@ class ConsultantHomeTabs extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 24,
-                                  backgroundImage: NetworkImage(
-                                    'https://example.com/avatar_completed_$idx.jpg',
+                                  // NOTE: Using NetworkImage which may require internet access
+                                  backgroundImage: const NetworkImage(
+                                    'https://example.com/avatar_completed_0.jpg',
                                   ),
                                   backgroundColor: AppColors.lightBlueBackground,
                                 ),
@@ -177,7 +201,7 @@ class ConsultantHomeTabs extends StatelessWidget {
                     },
                   ),
 
-                  // 3. Wallet / Earnings summary (same as before)
+                  // 3. Wallet / Earnings summary
                   Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -226,6 +250,7 @@ class ConsultantHomeTabs extends StatelessWidget {
             ),
           ],
         ),
+        // --- END: Integration of the TabBarView Content ---
       ),
     );
   }

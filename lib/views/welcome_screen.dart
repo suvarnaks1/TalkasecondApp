@@ -1,6 +1,5 @@
 import 'package:demotalkasecond/core/utils/app_colors.dart';
 import 'package:demotalkasecond/views/about_screen.dart';
-import 'package:demotalkasecond/views/demo/demo_about.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -169,7 +168,7 @@ Stack(
                       ),
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => DemoAbout()),
+                          MaterialPageRoute(builder: (_) => AboutUs()),
                         );
                       },
                       child: const Text(
