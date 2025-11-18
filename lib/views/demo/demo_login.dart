@@ -54,7 +54,7 @@ class _DemoLoginState extends State<DemoLogin> {
         case 'Dieticians':
         case 'Physicians':
         case 'Trainers':
-          nextScreen = PsychologistDashboard();
+          nextScreen = ConsultantBottomNav();
           break;
         case 'Department Heads':
         case 'Technical / Support Team':

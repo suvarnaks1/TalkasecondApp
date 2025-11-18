@@ -11,7 +11,7 @@ class ConsultantHomeTabs extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          
+          automaticallyImplyLeading: false,
           // 1. Add toolbarHeight to increase the main part of the AppBar
           toolbarHeight: 100, // Increased from the default 56.0
           title: Column(
